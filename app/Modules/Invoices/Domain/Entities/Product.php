@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\Invoices\Domain\Entities;
 
+use App\Domain\Enums\CurrencyEnum;
+use App\Domain\ValueObjects\Money;
 use Carbon\Carbon;
 use Ramsey\Uuid\UuidInterface;
 
@@ -12,8 +14,8 @@ class Product
     public function __construct(
         private UuidInterface $id,
         private string $name,
-        private $currency,
-        private float $price,
+        private CurrencyEnum $currency,
+        private Money $price,
         private int $quantity,
         private ?Carbon $createdAt = null,
         private ?Carbon $updatedAt = null,
@@ -40,22 +42,22 @@ class Product
         $this->name = $name;
     }
 
-    public function getCurrency(): mixed
+    public function getCurrency(): CurrencyEnum
     {
         return $this->currency;
     }
 
-    public function setCurrency($currency): void
+    public function setCurrency(CurrencyEnum $currency): void
     {
         $this->currency = $currency;
     }
 
-    public function getPrice(): float
+    public function getPrice(): Money
     {
         return $this->price;
     }
 
-    public function setPrice(float $price): void
+    public function setPrice(Money $price): void
     {
         $this->price = $price;
     }
@@ -64,7 +66,6 @@ class Product
     {
         return $this->quantity;
     }
-
 
     public function setQuantity(int $quantity): void
     {
@@ -89,5 +90,13 @@ class Product
     public function setUpdatedAt(?Carbon $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getTotalPrice(): Money
+    {
+        return new Money(
+            $this->price->amount * $this->quantity,
+            CurrencyEnum::USD
+        );
     }
 }

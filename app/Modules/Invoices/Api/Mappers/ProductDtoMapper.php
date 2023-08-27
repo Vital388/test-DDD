@@ -26,6 +26,7 @@ class ProductDtoMapper
             $product->getCurrency(),
             $product->getPrice(),
             $product->getQuantity(),
+            $product->getTotalPrice(),
             $product->getCreatedAt(),
             $product->getUpdatedAt()
         );

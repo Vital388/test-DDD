@@ -28,6 +28,7 @@ class InvoiceDtoMapper
             $invoice->getStatus(),
             $company,
             $products,
+            $invoice->getTotalPrice(),
             $invoice->getCreatedAt(),
             $invoice->getUpdatedAt()
         );

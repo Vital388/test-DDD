@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Modules\Invoices\Domain\Entities;
 
+use App\Domain\Enums\CurrencyEnum;
 use App\Domain\Enums\StatusEnum;
+use App\Domain\ValueObjects\Money;
 use Carbon\Carbon;
 use Ramsey\Uuid\UuidInterface;
 
@@ -130,5 +132,18 @@ class Invoice
     public function reject(): void
     {
         $this->setStatus(StatusEnum::REJECTED);
+    }
+
+    public function getTotalPrice(): Money
+    {
+        $total = 0;
+        foreach ($this->products as $product) {
+            $total += $product->getTotalPrice()->amount;
+        }
+
+        return new Money(
+            $total,
+            CurrencyEnum::USD
+        );
     }
 }
